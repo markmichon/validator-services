@@ -1,5 +1,9 @@
 var request = require('request')
 var validator = require('w3c-css')
+var RateLimiter = require('limiter').RateLimiter;
+
+// init rate limiter for w3c css requests
+var limiter = new RateLimiter(1, 'second');
 
 exports.validateHtml = (req, res) => {
   let options = {
@@ -29,12 +33,14 @@ exports.validateCSS = (req, res) => {
     profile: req.query.profile || 'css3svg',
     warning: req.query.warning || 1
   }
-
-  validator.validate(options, (err, data) => {
-    if (err) {
-      res.send(err)
-    } else {
-      res.send(data)
-    }
+// wraps validator in rate limiter
+  limiter.removeTokens(1, (err, remainingRequests) => {
+    validator.validate(options, (err, data) => {
+      if (err) {
+        res.send(err)
+      } else {
+        res.send(data)
+      }
+    })
   })
 }
