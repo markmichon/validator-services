@@ -9,7 +9,9 @@ app.set('port', process.env.PORT || 5000)
 
 app.use(cors());
 app.use(compression());
-
+app.get('/ping', function() {
+  console.log("I'm awake!");
+})
 app.get('/html', services.validateHtml)
 app.get('/css', services.validateCSS)
 
