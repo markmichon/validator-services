@@ -16,5 +16,8 @@
     "request": "^2.79.0",
     "w3c-css": "^2.0.0"
   },
+  "now": {
+    "alias": "validator-services",
+  },
   "devDependencies": {}
 }
