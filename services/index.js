@@ -1,28 +1,28 @@
-var request = require('request')
-var validator = require('w3c-css')
-var RateLimiter = require('limiter').RateLimiter;
+var request = require("request")
+var validator = require("w3c-css")
+var RateLimiter = require("limiter").RateLimiter
 
 // init rate limiter for w3c css requests
-var limiter = new RateLimiter(1, 'second');
+var limiter = new RateLimiter(1, "second")
 
 exports.validateHtml = (req, res) => {
   let options = {
-    uri: 'https://validator.w3.org/check',
+    uri: "https://validator.w3.org/check",
     headers: {
-      'User-Agent': 'request'
+      "User-Agent": "request"
     },
     qs: {
-      output: 'json',
-      uri: req.query.url,
+      output: "json",
+      uri: req.query.url
     }
-  };
+  }
 
   request(options, (err, response, body) => {
     if (!err && response.statusCode == 200) {
       res.send(body)
     } else {
-      console.error('Error', err)
-      console.error('Error Response', response)
+      console.error("Error", err)
+      console.error("Error Response", response)
     }
   })
 }
@@ -30,10 +30,10 @@ exports.validateHtml = (req, res) => {
 exports.validateCSS = (req, res) => {
   let options = {
     url: req.query.url,
-    profile: req.query.profile || 'css3svg',
+    profile: req.query.profile || "css3svg",
     warning: req.query.warning || 1
   }
-// wraps validator in rate limiter
+  // wraps validator in rate limiter
   limiter.removeTokens(1, (err, remainingRequests) => {
     validator.validate(options, (err, data) => {
       if (err) {
