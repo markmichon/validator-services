@@ -17,7 +17,7 @@
     "w3c-css": "^2.0.0"
   },
   "now": {
-    "alias": "validator-services",
+    "alias": "validator-services"
   },
   "devDependencies": {}
 }
