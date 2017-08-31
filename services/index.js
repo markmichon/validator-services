@@ -1,11 +1,13 @@
 var request = require("request")
 var validator = require("w3c-css")
 var RateLimiter = require("limiter").RateLimiter
-
+var getCss = require("get-css")
 // init rate limiter for w3c css requests
 var limiter = new RateLimiter(1, "second")
 
 exports.validateHtml = (req, res) => {
+  const { url } = req.query
+
   let options = {
     uri: "https://validator.w3.org/check",
     headers: {
@@ -13,13 +15,21 @@ exports.validateHtml = (req, res) => {
     },
     qs: {
       output: "json",
-      uri: req.query.url
+      uri: url
     }
   }
 
   request(options, (err, response, body) => {
     if (!err && response.statusCode == 200) {
-      res.send(body)
+      request({ uri: url }, (e, r, b) => {
+        res.send(
+          JSON.stringify({
+            validation: JSON.parse(body),
+            raw: b
+          })
+        )
+      })
+      // res.send(body)
     } else {
       console.error("Error", err)
       console.error("Error Response", response)
@@ -39,7 +49,14 @@ exports.validateCSS = (req, res) => {
       if (err) {
         res.send(err)
       } else {
-        res.send(data)
+        getCss(req.query.url).then(css => {
+          res.send(
+            JSON.stringify({
+              validation: data,
+              raw: css.css
+            })
+          )
+        })
       }
     })
   })
