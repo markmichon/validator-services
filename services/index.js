@@ -2,6 +2,7 @@ var request = require("request")
 var validator = require("w3c-css")
 var RateLimiter = require("limiter").RateLimiter
 var getCss = require("get-css")
+var Prism = require("prismjs")
 // init rate limiter for w3c css requests
 var limiter = new RateLimiter(1, "second")
 
@@ -25,7 +26,7 @@ exports.validateHtml = (req, res) => {
         res.send(
           JSON.stringify({
             validation: JSON.parse(body),
-            raw: b
+            raw: Prism.highlight(b, Prism.languages.markup)
           })
         )
       })
@@ -53,7 +54,7 @@ exports.validateCSS = (req, res) => {
           res.send(
             JSON.stringify({
               validation: data,
-              raw: css.css
+              raw: Prism.highlight(css.css, Prism.languages.css)
             })
           )
         })

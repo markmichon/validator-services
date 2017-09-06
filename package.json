@@ -1,6 +1,6 @@
 {
   "name": "validator-services",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -14,11 +14,9 @@
     "express": "^4.14.0",
     "get-css": "^1.2.3",
     "limiter": "^1.1.0",
+    "prismjs": "^1.6.0",
     "request": "^2.79.0",
     "w3c-css": "^2.0.0"
-  },
-  "now": {
-    "alias": "validator-services"
   },
   "devDependencies": {}
 }
